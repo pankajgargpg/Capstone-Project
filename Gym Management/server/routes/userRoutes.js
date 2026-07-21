@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { protect, restrictTo } = require('../middleware/authMiddleware');
+const { protect, restrictTo } = require('../Middleware/authMiddleware');
 
 // FIXED: Yahan 'assignTrainer' ko import karna zaroori tha
 const { getUsers, assignTrainer, renewMembership } = require('../controller/userController');
