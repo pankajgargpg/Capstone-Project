@@ -16,7 +16,7 @@ export default function AdminMembers() {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/users', {
+      const response = await axios.get('${import.meta.env.VITE_API_URL}/api/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(response.data);
@@ -39,7 +39,7 @@ export default function AdminMembers() {
     try {
       const token = localStorage.getItem('token');
       // Using the auth/register route. Note: The backend should ideally allow admin to bypass password requirements or send an invite link.
-      await axios.post('http://localhost:5000/api/auth/register', {
+      await axios.post('${import.meta.env.VITE_API_URL}/api/auth/register', {
         name: nName,
         email: nEmail,
         password: nPass,
@@ -59,7 +59,7 @@ export default function AdminMembers() {
   const assignTrainer = async (memberId, trainerId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5000/api/users/${memberId}/assign-trainer`, {
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/users/${memberId}/assign-trainer`, {
         trainerId: trainerId || null
       }, {
         headers: { Authorization: `Bearer ${token}` }
@@ -75,7 +75,7 @@ export default function AdminMembers() {
   const renewMembership = async (memberId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5000/api/users/${memberId}/renew`, {}, {
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/users/${memberId}/renew`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

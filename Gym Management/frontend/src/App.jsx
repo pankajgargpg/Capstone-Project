@@ -146,7 +146,7 @@ function LoginScreen({ onLogin, onSwitchToSignup }) {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, { email, password });
       localStorage.setItem('token', response.data.token);
       onLogin(response.data);
     } catch (err) {
@@ -195,7 +195,7 @@ function SignupScreen({ onLogin, onSwitchToLogin }) {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', { name, email, password, role: 'member' });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, { name, email, password, role: 'member' });
       localStorage.setItem('token', response.data.token);
       onLogin(response.data);
     } catch (err) {
@@ -246,7 +246,7 @@ function AdminHome() {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:5000/api/users', {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/users`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUsers(response.data);
@@ -299,7 +299,7 @@ function AdminMembers() {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/users', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/users`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(response.data);
@@ -321,7 +321,7 @@ function AdminMembers() {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/auth/register', {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
         name: nName, email: nEmail, password: nPass, role: nRole
       }, { headers: { Authorization: `Bearer ${token}` } });
       
@@ -336,7 +336,7 @@ function AdminMembers() {
   const assignTrainer = async (memberId, trainerId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5000/api/users/${memberId}/assign-trainer`, {
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/users/${memberId}/assign-trainer`, {
         trainerId: trainerId || null
       }, { headers: { Authorization: `Bearer ${token}` } });
       
@@ -350,7 +350,7 @@ function AdminMembers() {
   const renewMembership = async (memberId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5000/api/users/${memberId}/renew`, {}, {
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/users/${memberId}/renew`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchUsers();
@@ -474,12 +474,12 @@ function TrainerHome({ user }) {
       try {
         const token = localStorage.getItem('token');
         // 1. Fetch Clients
-        const usersRes = await axios.get('http://localhost:5000/api/users', { headers: { Authorization: `Bearer ${token}` } });
+        const usersRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/users`, { headers: { Authorization: `Bearer ${token}` } });
         const clients = usersRes.data.filter(u => u.role === 'member' && u.assignedTrainer === user._id);
         setClientsCount(clients.length);
 
         // 2. Fetch Attendance Logs
-        const attRes = await axios.get('http://localhost:5000/api/attendance', { headers: { Authorization: `Bearer ${token}` } });
+        const attRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/attendance`, { headers: { Authorization: `Bearer ${token}` } });
         setRecentLogs(attRes.data.slice(0, 4));
       } catch (error) {
         console.error("Failed to fetch trainer data", error);
@@ -531,7 +531,7 @@ function TrainerClients({ user }) {
     const fetchClients = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:5000/api/users', {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/users`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const clients = response.data.filter(u => u.role === 'member' && u.assignedTrainer === user._id);
@@ -548,7 +548,7 @@ function TrainerClients({ user }) {
   const markAttendance = async (memberId, status) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/attendance', {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/attendance`, {
         memberId,
         status
       }, {
@@ -613,7 +613,7 @@ function TrainerAttendanceLog({ user }) {
     const fetchLogs = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:5000/api/attendance', {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/attendance`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setMyLogs(response.data);
@@ -704,7 +704,7 @@ function MemberPlan({ user, db, updateCurrentUser }) {
       if (!user.assignedTrainer) return;
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:5000/api/users', {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/users`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const trainer = response.data.find(u => u._id === user.assignedTrainer);
@@ -720,7 +720,7 @@ function MemberPlan({ user, db, updateCurrentUser }) {
     setIsPaying(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.put(`http://localhost:5000/api/users/${user._id}/renew`, {}, {
+      const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/users/${user._id}/renew`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
